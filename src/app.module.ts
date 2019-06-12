@@ -12,7 +12,7 @@ import { MONGO_URI } from './configs/vars';
 @Module({
   imports: [
     MongooseModule.forRoot(MONGO_URI, {
-      useFindAndModify: false,
+      useFindAndModify: true,
       useCreateIndex: true,
       useNewUrlParser: true,
     }),
