@@ -9,8 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './interfaces/user.interface';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -18,8 +17,8 @@ export class UsersController {
 
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() userDto: CreateUserDto) {
-    await this.usersService.create(userDto);
+  async create(@Body() user: User) {
+    await this.usersService.create(user);
   }
 
   @Get()

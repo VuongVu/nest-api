@@ -1,30 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { User } from './interfaces/user.interface';
-import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
 
-  async create(userDto: CreateUserDto): Promise<User> {
-    // Create hash password
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(userDto.password, salt);
-    userDto.password = hash;
-
-    const newUser = new this.userModel(userDto);
-    return await newUser.save();
+  async create(user: User): Promise<User> {
+    const newUser = await this.userRepository.create(user);
+    return await this.userRepository.save(newUser);
   }
 
   async findAll(): Promise<User[]> {
-    return await this.userModel.find().exec();
+    return await this.userRepository.find();
+  }
+
+  async findById(id: string): Promise<User> {
+    return await this.userRepository.findOne(id);
   }
 
   async findByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email }).exec();
+    return await this.userRepository.findOne({ email });
   }
 }

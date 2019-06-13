@@ -1,6 +1,7 @@
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { Module, CacheModule, CacheInterceptor } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 
 import { AllExceptionsFilter } from './common/filters/exception.filter';
 
@@ -12,10 +13,13 @@ import { MONGO_URI } from './configs/vars';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(MONGO_URI, {
-      useFindAndModify: true,
-      useCreateIndex: true,
+    TypeOrmModule.forRoot({
+      type: 'mongodb',
+      url: MONGO_URI,
+      entities: [join(__dirname, '**/**.entity{.ts,.js}')],
+      synchronize: true,
       useNewUrlParser: true,
+      logging: true,
     }),
     CacheModule.register({
       ttl: 60 * 60, // 1 hours

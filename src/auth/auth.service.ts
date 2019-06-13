@@ -13,9 +13,9 @@ export class AuthService {
     private readonly usersService: UsersService,
   ) {}
 
-  async createToken(email: string) {
-    const user: JwtPayload = { email };
-    const accessToken = this.jwtService.sign(user);
+  async createToken(id: string, email: string) {
+    const payload: JwtPayload = { id, email };
+    const accessToken = this.jwtService.sign(payload);
 
     return {
       expiresIn: JWT_EXPIRES,
@@ -24,6 +24,6 @@ export class AuthService {
   }
 
   async validate(payload: JwtPayload): Promise<any> {
-    return await this.usersService.findByEmail(payload.email);
+    return await this.usersService.findById(payload.id);
   }
 }
