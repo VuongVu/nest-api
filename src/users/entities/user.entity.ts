@@ -8,6 +8,7 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import { IsEmail, IsNotEmpty, MinLength, Matches } from 'class-validator';
+import { Exclude, Transform } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 
 export enum UserRole {
@@ -25,6 +26,7 @@ export enum UserStatus {
 @Entity()
 export class User {
   @ObjectIdColumn()
+  @Transform((id: ObjectID) => id.toHexString(), { toPlainOnly: true })
   id: ObjectID;
 
   @Column({ unique: true })
@@ -32,6 +34,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   @IsNotEmpty()
   @MinLength(6)
   @Matches(
@@ -56,9 +59,11 @@ export class User {
   status: UserStatus;
 
   @CreateDateColumn()
+  @Exclude({ toPlainOnly: true })
   createdAt: string;
 
   @UpdateDateColumn()
+  @Exclude({ toPlainOnly: true })
   updatedAt: string;
 
   @BeforeInsert()

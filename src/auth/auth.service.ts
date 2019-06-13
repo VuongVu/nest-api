@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { JWT_EXPIRES } from '../configs/vars';
+import { JWT_EXPIRES } from '../configs/constants';
 
 @Injectable()
 export class AuthService {

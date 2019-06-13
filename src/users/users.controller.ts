@@ -1,12 +1,11 @@
 import {
   Controller,
-  Body,
-  Post,
   Get,
-  UsePipes,
-  ValidationPipe,
-  Param,
+  UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
@@ -15,19 +14,10 @@ import { User } from './entities/user.entity';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() user: User) {
-    await this.usersService.create(user);
-  }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
+  @UseGuards(AuthGuard('jwt'))
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
-  }
-
-  @Get(':email')
-  async findByEmail(@Param('email') email: string): Promise<User> {
-    return this.usersService.findByEmail(email);
   }
 }

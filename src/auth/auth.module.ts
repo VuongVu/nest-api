@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
 
-import { JWT_SECRET, JWT_EXPIRES } from '../configs/vars';
+import { JWT_SECRET, JWT_EXPIRES } from '../configs/constants';
 
 @Module({
   imports: [

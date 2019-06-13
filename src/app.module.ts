@@ -9,7 +9,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 
-import { MONGO_URI } from './configs/vars';
+import { MONGO_URI } from './configs/constants';
 
 @Module({
   imports: [
@@ -19,10 +19,11 @@ import { MONGO_URI } from './configs/vars';
       entities: [join(__dirname, '**/**.entity{.ts,.js}')],
       synchronize: true,
       useNewUrlParser: true,
-      logging: true,
+      logging: 'all',
+      logger: 'file',
     }),
     CacheModule.register({
-      ttl: 60 * 60, // 1 hours
+      ttl: 10, // 10s
     }),
     UsersModule,
     AuthModule,
@@ -32,6 +33,10 @@ import { MONGO_URI } from './configs/vars';
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
     },
     {
       provide: APP_INTERCEPTOR,

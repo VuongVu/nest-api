@@ -52,4 +52,26 @@ export class AuthController {
       token,
     });
   }
+
+  @Post('/register')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async register(@Body() user: User, @Res() res: Response) {
+    const isUserExists = await this.usersService.findByEmail(user.email);
+    if (isUserExists) {
+      res.status(HttpStatus.BAD_REQUEST).json({
+        message: 'Email is exists, please try another',
+      });
+    }
+
+    const newUser = await this.usersService.create(user);
+    const token = await this.authService.createToken(
+      newUser.id.toString(),
+      newUser.email,
+    );
+
+    res.status(HttpStatus.OK).json({
+      email: user.email,
+      token,
+    });
+  }
 }

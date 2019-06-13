@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { AuthService } from './auth.service';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { JWT_SECRET } from '../configs/vars';
+import { JWT_SECRET } from '../configs/constants';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

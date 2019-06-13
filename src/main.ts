@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
+import * as compression from 'compression';
 
 import { AppModule } from './app.module';
 
@@ -10,6 +11,7 @@ async function bootstrap() {
     cors: true,
     bodyParser: true,
   });
+  app.use(compression());
   app.use(helmet());
   app.use(
     new rateLimit({
