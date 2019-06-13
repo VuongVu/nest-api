@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 import { User } from './interfaces/user.interface';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,5 +22,9 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return await this.userModel.find().exec();
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    return await this.userModel.findOne({ email }).exec();
   }
 }

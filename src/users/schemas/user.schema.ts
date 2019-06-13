@@ -10,8 +10,13 @@ export const UserSchema = new mongoose.Schema(
     password: {
       type: String,
     },
+    status: {
+      type: String,
+      default: 'active',
+    },
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 );

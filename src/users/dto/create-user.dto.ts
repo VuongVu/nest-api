@@ -11,11 +11,16 @@ export class CreateUserDto {
   readonly email: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Password is required' })
-  @MinLength(6, { message: 'Min length is 6' })
+  @IsNotEmpty()
+  @MinLength(6)
   @Matches(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
-    'Password should contain at least one digit, one lowercase, one uppercase and one special character',
+    {
+      message:
+        'Password should contain at least one digit, one lowercase, one uppercase and one special character',
+    },
   )
   password: string;
+
+  readonly status: string;
 }

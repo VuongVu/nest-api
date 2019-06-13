@@ -23,3 +23,6 @@ if (!MONGO_URI) {
   );
   process.exit(1);
 }
+
+export const { JWT_SECRET } = process.env;
+export const { JWT_EXPIRES } = process.env;
