@@ -18,7 +18,7 @@ export enum UserRole {
 }
 
 export enum UserStatus {
-  DEACTIVE = 0,
+  DISABLE = 0,
   PENDING = 1,
   ACTIVE = 2,
 }

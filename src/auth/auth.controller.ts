@@ -6,6 +6,8 @@ import {
   HttpStatus,
   UsePipes,
   ValidationPipe,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
@@ -28,7 +30,7 @@ export class AuthController {
     // find user exists in db
     const user: User = await this.usersService.findByEmail(userLoginDto.email);
     if (!user) {
-      res.status(HttpStatus.BAD_REQUEST).json({ message: 'User not found' });
+      throw new NotFoundException('User not found');
     }
 
     // compare password input & db
@@ -37,9 +39,7 @@ export class AuthController {
       user.password,
     );
     if (!checkPassword) {
-      res
-        .status(HttpStatus.BAD_REQUEST)
-        .json({ message: 'Password does not match' });
+      throw new BadRequestException('Password does not match');
     }
 
     // create accessToken
@@ -58,9 +58,7 @@ export class AuthController {
   async register(@Body() user: User, @Res() res: Response) {
     const isUserExists = await this.usersService.findByEmail(user.email);
     if (isUserExists) {
-      res.status(HttpStatus.BAD_REQUEST).json({
-        message: 'Email is exists, please try another',
-      });
+      throw new BadRequestException('Email is exists, please try another');
     }
 
     const newUser = await this.usersService.create(user);
